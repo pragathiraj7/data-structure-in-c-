@@ -1,82 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIZE 5  // Reduced size to test easily
+#define MAX 5  // Maximum capacity of the stack
 
-int queue[SIZE];
-int front = -1, rear = -1;
+int stack[MAX];
+int top = -1;  // Indicates empty stack
 
-// Function to add an element
-void enqueue(int value) {
-    if (rear == SIZE - 1) {
-        printf("Queue is Full!\n");
+// Function to push an element onto the stack
+void push(int value) {
+    if (top == MAX - 1) {
+        printf("Stack Overflow! Cannot push %d\n", value);
         return;
     }
-    if (front == -1) {
-        front = 0; // First element being added
-    }
-    rear++;
-    queue[rear] = value;
-    printf("Inserted %d successfully.\n", value);
+    top++;
+    stack[top] = value;
+    printf("%d pushed to stack.\n", value);
 }
 
-// Function to remove an element
-void dequeue() {
-    if (front == -1 || front > rear) {
-        printf("Queue is Empty!\n");
-        return;
+// Function to pop an element from the stack
+int pop() {
+    if (top == -1) {
+        printf("Stack Underflow! No elements to pop.\n");
+        return -1;
     }
-    printf("Deleted: %d\n", queue[front]);
-    front++;
-    
-    // Reset queue pointers if all elements are deleted
-    if (front > rear) {
-        front = rear = -1;
-    }
+    int poppedValue = stack[top];
+    top--;
+    return poppedValue;
 }
 
-// Function to display elements
-void display() {
-    if (front == -1 || front > rear) {
-        printf("Queue is Empty!\n");
-        return;
+// Function to view the top element
+int peek() {
+    if (top == -1) {
+        printf("Stack is empty!\n");
+        return -1;
     }
-    printf("Queue elements: ");
-    for (int i = front; i <= rear; i++) {
-        printf("%d ", queue[i]);
-    }
-    printf("\n");
+    return stack[top];
 }
 
+// Main function to demonstrate operations
 int main() {
-    int choice, value;
+    push(10);
+    push(20);
+    push(30);
 
-    while (1) {
-        printf("\n--- MENU ---\n");
-        printf("1. Enqueue (Insert)\n");
-        printf("2. Dequeue (Delete)\n");
-        printf("3. Display\n");
-        printf("4. Exit\n");
-        printf("Enter choice: ");
-        scanf("%d", &choice);
+    printf("Top element (Peek): %d\n", peek());
 
-        switch (choice) {
-            case 1:
-                printf("Enter value: ");
-                scanf("%d", &value);
-                enqueue(value);
-                break;
-            case 2:
-                dequeue();
-                break;
-            case 3:
-                display();
-                break;
-            case 4:
-                exit(0);
-            default:
-                printf("Invalid choice! Try again.\n");
-        }
-    }
+    printf("Popped element: %d\n", pop());
+    printf("Popped element: %d\n", pop());
+
+    printf("Top element after pops: %d\n", peek());
+
     return 0;
 }
